@@ -1,6 +1,9 @@
 import UnifiedSeo from '@/components/seo/unified-seo';
 import { Suspense } from 'react';
 
+type Pdf = { id: number; title: string; status: string };
+type PdfError = { error: boolean; message: string };
+
 async function fetchAdminPdfs() {
   try {
     const res = await fetch(`${process.env.API_URL}/api/pdfs`, { cache: 'no-store' });
@@ -21,8 +24,8 @@ function Loading() {
 }
 
 export default async function AdminPdfsPage() {
-  const pdfs = await fetchAdminPdfs();
-  const erro = pdfs.find((p: any) => p.error);
+  const pdfs = await fetchAdminPdfs() as (Pdf | PdfError)[];
+  const erro = pdfs.find((p): p is PdfError => 'error' in p && p.error);
   return (
     <div className="container mx-auto py-12">
       <UnifiedSeo title="Admin - PDFs" description="Gerencie os PDFs do site." />
@@ -39,7 +42,7 @@ export default async function AdminPdfsPage() {
             </tr>
           </thead>
           <tbody>
-            {pdfs.filter((p: any) => !p.error).map((pdf: any) => (
+            {pdfs.filter((p): p is Pdf => !('error' in p)).map((pdf) => (
               <tr key={pdf.id} className="border-t border-dark-border">
                 <td className="p-3">{pdf.title}</td>
                 <td className="p-3">{pdf.status}</td>

@@ -2,6 +2,8 @@
 import UnifiedSeo from '@/components/seo/unified-seo';
 import { useState, useEffect } from 'react';
 
+type Anuncio = { id: number; nome: string; status: string };
+
 function SkeletonAnunciosTable() {
   return (
     <div className="w-full max-w-2xl bg-dark-surface border border-dark-border rounded-lg p-8 animate-pulse">
@@ -28,7 +30,7 @@ async function fetchAdminAnuncios() {
 }
 
 export default function AdminAnunciosPage() {
-  const [anuncios, setAnuncios] = useState<any[]>([]);
+  const [anuncios, setAnuncios] = useState<Anuncio[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState('');
   const [success, setSuccess] = useState(false);

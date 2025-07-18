@@ -22,7 +22,9 @@ async function getPdfBySlug(slug: string): Promise<Pdf | null> {
   return null;
 }
 
-export default async function PdfDetailPage({ params }: { params: { slug: string } }) {
+type PdfPageProps = { params: { slug: string } };
+
+export default async function PdfDetailPage({ params }: PdfPageProps) {
   const pdf = await getPdfBySlug(params.slug);
   if (!pdf) {
     return (

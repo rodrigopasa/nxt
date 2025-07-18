@@ -2,6 +2,8 @@
 import UnifiedSeo from '@/components/seo/unified-seo';
 import { useState, useEffect } from 'react';
 
+type Categoria = { id: number; nome: string };
+
 function Toast({ message, type, onClose }: { message: string; type: 'success' | 'error'; onClose: () => void }) {
   return (
     <div className={`fixed top-6 right-6 z-50 px-4 py-2 rounded shadow-lg text-white ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}
@@ -38,7 +40,7 @@ async function fetchAdminCategorias() {
 }
 
 export default function AdminCategoriasPage() {
-  const [categorias, setCategorias] = useState<any[]>([]);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState('');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -148,7 +150,7 @@ export default function AdminCategoriasPage() {
               </tr>
             </thead>
             <tbody>
-              {categorias.map((cat: any) => (
+              {categorias.map((cat: Categoria) => (
                 <tr key={cat.id} className="border-t border-dark-border">
                   <td className="p-3">
                     {editId === cat.id ? (
@@ -160,7 +162,7 @@ export default function AdminCategoriasPage() {
                         autoFocus
                       />
                     ) : (
-                      cat.nome || cat.name
+                      cat.nome
                     )}
                   </td>
                   <td className="p-3 flex gap-2">
@@ -171,7 +173,7 @@ export default function AdminCategoriasPage() {
                       </>
                     ) : (
                       <>
-                        <button onClick={() => { setEditId(cat.id); setEditNome(cat.nome || cat.name); }} className="bg-blue-600 text-white px-3 py-1 rounded" aria-label="Editar">Editar</button>
+                        <button onClick={() => { setEditId(cat.id); setEditNome(cat.nome); }} className="bg-blue-600 text-white px-3 py-1 rounded" aria-label="Editar">Editar</button>
                         <button onClick={() => setRemoverId(cat.id)} className="bg-red-600 text-white px-3 py-1 rounded" aria-label="Remover">Remover</button>
                       </>
                     )}

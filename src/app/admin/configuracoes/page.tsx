@@ -2,6 +2,8 @@
 import UnifiedSeo from '@/components/seo/unified-seo';
 import { useState, useEffect } from 'react';
 
+type Configs = { maintenance: boolean; error?: boolean; message?: string };
+
 function SkeletonConfigForm() {
   return (
     <div className="max-w-xl bg-dark-surface border border-dark-border rounded-lg p-8 animate-pulse">
@@ -24,7 +26,7 @@ async function fetchAdminConfigs() {
 }
 
 export default function AdminConfiguracoesPage() {
-  const [configs, setConfigs] = useState<any | null>(null);
+  const [configs, setConfigs] = useState<Configs | null>(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState('');
   const [success, setSuccess] = useState(false);
@@ -69,7 +71,7 @@ export default function AdminConfiguracoesPage() {
           {success && <div className="mb-4 text-green-500">Configurações salvas com sucesso!</div>}
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium">Modo manutenção</label>
-            <select name="maintenance" className="w-full p-2 rounded bg-dark-surface-2 border border-dark-border" defaultValue={configs.maintenance ? 'on' : 'off'}>
+            <select name="maintenance" className="w-full p-2 rounded bg-dark-surface-2 border border-dark-border" defaultValue={configs?.maintenance ? 'on' : 'off'}>
               <option value="off">Desligado</option>
               <option value="on">Ligado</option>
             </select>

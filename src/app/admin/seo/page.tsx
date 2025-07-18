@@ -2,6 +2,8 @@
 import UnifiedSeo from '@/components/seo/unified-seo';
 import { useState, useEffect } from 'react';
 
+type SeoSettings = { siteTitle: string; siteDescription: string; error?: boolean; message?: string };
+
 function SkeletonSeoForm() {
   return (
     <div className="max-w-xl bg-dark-surface border border-dark-border rounded-lg p-8 animate-pulse">
@@ -15,7 +17,7 @@ function SkeletonSeoForm() {
   );
 }
 
-async function fetchAdminSeo() {
+async function fetchAdminSeo(): Promise<SeoSettings> {
   try {
     const res = await fetch(`${process.env.API_URL}/api/seo-settings`, { cache: 'no-store' });
     if (!res.ok) throw new Error('Erro na API');
@@ -26,7 +28,7 @@ async function fetchAdminSeo() {
 }
 
 export default function AdminSeoPage() {
-  const [seo, setSeo] = useState<any | null>(null);
+  const [seo, setSeo] = useState<SeoSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState('');
   const [success, setSuccess] = useState(false);
@@ -35,7 +37,7 @@ export default function AdminSeoPage() {
     fetchAdminSeo().then((data) => {
       setSeo(data);
       setLoading(false);
-      if (data.error) setErro(data.message);
+      if (data.error) setErro(data.message || 'Erro desconhecido');
     });
   }, []);
 
@@ -72,11 +74,11 @@ export default function AdminSeoPage() {
           {success && <div className="mb-4 text-green-500">Configurações salvas com sucesso!</div>}
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium">Título do Site</label>
-            <input name="siteTitle" className="w-full p-2 rounded bg-dark-surface-2 border border-dark-border" type="text" defaultValue={seo.siteTitle} placeholder="Título do site" />
+            <input name="siteTitle" className="w-full p-2 rounded bg-dark-surface-2 border border-dark-border" type="text" defaultValue={seo?.siteTitle} placeholder="Título do site" />
           </div>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium">Descrição</label>
-            <textarea name="siteDescription" className="w-full p-2 rounded bg-dark-surface-2 border border-dark-border" rows={3} defaultValue={seo.siteDescription} placeholder="Descrição do site" />
+            <textarea name="siteDescription" className="w-full p-2 rounded bg-dark-surface-2 border border-dark-border" rows={3} defaultValue={seo?.siteDescription} placeholder="Descrição do site" />
           </div>
           <button type="submit" className="bg-primary text-white px-6 py-2 rounded hover:bg-primary-dark">Salvar</button>
         </form>

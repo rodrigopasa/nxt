@@ -7,7 +7,9 @@ const allPdfs = [
   { id: 3, slug: 'exemplo-recente', title: 'PDF Recente 1', description: 'Descrição do PDF recente.', category: 'educacao' },
 ];
 
-export default function CategoriaPage({ params }: { params: { slug: string } }) {
+type CategoriaPageProps = { params: { slug: string } };
+
+export default async function CategoriaPage({ params }: CategoriaPageProps) {
   const pdfs = allPdfs.filter((pdf) => pdf.category === params.slug);
   const categoryName = params.slug.charAt(0).toUpperCase() + params.slug.slice(1);
   return (
